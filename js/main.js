@@ -1,4 +1,5 @@
 import {generatedPosts} from './data.mjs';
+import {renderThumbnails} from './thumbnails.mjs';
 
-// eslint-disable-next-line no-console
-console.table(generatedPosts());
+const picturesData = generatedPosts();
+renderThumbnails(picturesData);
