@@ -28,4 +28,16 @@ const createRandomIdFromRange = (min, max) => {
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-export {getRandomInteger, createRandomIdFromRange, getRandomArrayElement};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const createElement = (tagName, className, text) => {
+  const element = document.createElement(tagName.toString().trim());
+  element.classList.add(className.toString().trim());
+  element.textContent = text ? text : null;
+
+  return element;
+};
+
+const getElementIndex = (el) => [...el.parentElement.children].indexOf(el);
+
+export {getRandomInteger, createRandomIdFromRange, getRandomArrayElement, isEscapeKey, createElement, getElementIndex};

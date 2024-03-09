@@ -1,9 +1,11 @@
+import {openUserPostModal} from './full-photo-modal.mjs';
+
 const thumbnailContainer = document.querySelector('.pictures');
 const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const createThumbnail = ({urlPhoto, description, likes, comments}) => {
+const createThumbnail = ({urlPhoto, description, likes, comments}, index) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
   const thumbnailImgElement = thumbnail.querySelector('.picture__img');
 
@@ -11,6 +13,7 @@ const createThumbnail = ({urlPhoto, description, likes, comments}) => {
   thumbnailImgElement.alt = description;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.setAttribute('data-index', index);
 
   return thumbnail;
 };
@@ -18,11 +21,27 @@ const createThumbnail = ({urlPhoto, description, likes, comments}) => {
 const renderThumbnails = (pictures) => {
   const thumbnailListFragment = document.createDocumentFragment();
 
-  pictures.forEach((picture) => {
-    const thumbnailElement = createThumbnail(picture);
+  pictures.forEach((picture, index) => {
+    const thumbnailElement = createThumbnail(picture, index);
     thumbnailListFragment.append(thumbnailElement);
   });
   thumbnailContainer.append(thumbnailListFragment);
 };
 
-export {renderThumbnails};
+
+const onThumbnailClick = (pictures) => {
+  thumbnailContainer.addEventListener('click', (evt) => {
+    const thumbnailLink = evt.target.closest('a.picture');
+
+    if (thumbnailLink) {
+
+      const thumbnailItem = pictures[thumbnailLink.dataset.index];
+
+      if (thumbnailItem) {
+        openUserPostModal(thumbnailItem);
+      }
+    }
+  });
+};
+
+export {renderThumbnails, onThumbnailClick};
