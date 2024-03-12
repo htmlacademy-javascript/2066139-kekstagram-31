@@ -18,6 +18,19 @@ const createThumbnail = ({urlPhoto, description, likes, comments}, index) => {
   return thumbnail;
 };
 
+const onThumbnailClick = (evt, pictures) => {
+  const thumbnailLink = evt.target.closest('a.picture');
+
+  if (thumbnailLink) {
+
+    const thumbnailItem = pictures[thumbnailLink.dataset.index];
+
+    if (thumbnailItem) {
+      openUserPostModal(thumbnailItem);
+    }
+  }
+};
+
 const renderThumbnails = (pictures) => {
   const thumbnailListFragment = document.createDocumentFragment();
 
@@ -25,23 +38,9 @@ const renderThumbnails = (pictures) => {
     const thumbnailElement = createThumbnail(picture, index);
     thumbnailListFragment.append(thumbnailElement);
   });
+
   thumbnailContainer.append(thumbnailListFragment);
-};
-
-
-const onThumbnailClick = (pictures) => {
-  thumbnailContainer.addEventListener('click', (evt) => {
-    const thumbnailLink = evt.target.closest('a.picture');
-
-    if (thumbnailLink) {
-
-      const thumbnailItem = pictures[thumbnailLink.dataset.index];
-
-      if (thumbnailItem) {
-        openUserPostModal(thumbnailItem);
-      }
-    }
-  });
+  thumbnailContainer.addEventListener('click', (evt) => onThumbnailClick(evt, pictures));
 };
 
 export {renderThumbnails, onThumbnailClick};
