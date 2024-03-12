@@ -1,5 +1,3 @@
-import {createElement} from './util.mjs';
-
 const userPostModalElement = document.querySelector('.big-picture');
 const socialCommentList = userPostModalElement.querySelector('.social__comments');
 const commentCount = userPostModalElement.querySelector('.social__comment-count');
@@ -12,20 +10,24 @@ const likesCount = userPostModalElement.querySelector('.likes-count');
 const commentShownCount = userPostModalElement.querySelector('.social__comment-shown-count');
 const commentTotalCount = userPostModalElement.querySelector('.social__comment-total-count');
 
+const commentTemplate = document.querySelector('#comment')
+  .content
+  .querySelector('.social__comment');
+
 const getListСomments = (comments) => {
   const commentListFragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
-    const socialCommentItem = createElement('li', 'social__comment');
-    const commentatorAvatar = createElement('img', 'social__picture');
+    const commentElement = commentTemplate.cloneNode(true);
+
+    const commentatorAvatar = commentElement.querySelector('.social__picture');
+    const commentatorMessage = commentElement.querySelector('.social__text');
     commentatorAvatar.src = comment.avatar;
     commentatorAvatar.alt = comment.name;
-    commentatorAvatar.width = 35;
-    commentatorAvatar.height = 35;
-    const commentatorMessage = createElement('p', 'social__text', comment.message);
+    commentatorMessage.textContent = comment.message;
 
-    socialCommentItem.append(commentatorAvatar, commentatorMessage);
-    commentListFragment.append(socialCommentItem);
+    commentElement.append(commentatorAvatar, commentatorMessage);
+    commentListFragment.append(commentElement);
   });
 
   return socialCommentList.append(commentListFragment);
