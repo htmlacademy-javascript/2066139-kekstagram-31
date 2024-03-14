@@ -11,7 +11,10 @@ const createThumbnail = ({urlPhoto, description, likes, comments}, imageClickHan
   thumbnailImgElement.alt = description;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
-  thumbnailImgElement.addEventListener('click', () => imageClickHandler({urlPhoto, description, likes, comments}));
+  thumbnailImgElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    imageClickHandler({urlPhoto, description, likes, comments});
+  });
 
   return thumbnail;
 };
