@@ -18,6 +18,7 @@ function openUserPostModal (pictureItem) {
   document.addEventListener('keydown', onDocumentKeydown);
   userPostModalCloseElement.addEventListener('click', closeUserPostModal);
 
+  socialCommentList.innerHTML = '';
   renderDataUserPost(pictureItem);
   userPostModalElement.classList.remove('hidden');
 }
