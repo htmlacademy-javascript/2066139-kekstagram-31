@@ -1,7 +1,6 @@
+const START_NUMBER_SHOW_COMMENTS = 5;
 const userPostModalElement = document.querySelector('.big-picture');
 const socialCommentList = userPostModalElement.querySelector('.social__comments');
-const commentCount = userPostModalElement.querySelector('.social__comment-count');
-const commentsLoader = userPostModalElement.querySelector('.comments-loader');
 
 const fullSizePhoto = userPostModalElement.querySelector('.big-picture__img img');
 const socialCaption = userPostModalElement.querySelector('.social__caption');
@@ -17,14 +16,18 @@ const commentTemplate = document.querySelector('#comment')
 const getListСomments = (comments) => {
   const commentListFragment = document.createDocumentFragment();
 
-  comments.forEach((comment) => {
+  comments.forEach(({avatar, message, name}, index) => {
     const commentElement = commentTemplate.cloneNode(true);
 
     const commentatorAvatar = commentElement.querySelector('.social__picture');
     const commentatorMessage = commentElement.querySelector('.social__text');
-    commentatorAvatar.src = comment.avatar;
-    commentatorAvatar.alt = comment.name;
-    commentatorMessage.textContent = comment.message;
+    commentatorAvatar.src = avatar;
+    commentatorAvatar.alt = name;
+    commentatorMessage.textContent = message;
+
+    if (index >= START_NUMBER_SHOW_COMMENTS) {
+      commentElement.classList.add('hidden');
+    }
 
     commentElement.append(commentatorAvatar, commentatorMessage);
     commentListFragment.append(commentElement);
@@ -33,19 +36,24 @@ const getListСomments = (comments) => {
   return socialCommentList.append(commentListFragment);
 };
 
-const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
-  commentsLoader.classList.add('hidden'); //temp
-  commentCount.classList.add('hidden'); //temp
+const updateShownCommentCount = () => {
+  commentShownCount.textContent = socialCommentList.querySelectorAll('.social__comment:not(.hidden)').length;
+};
 
+const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   fullSizePhoto.src = urlPhoto;
   fullSizePhoto.alt = description;
 
   socialCaption.textContent = description;
   likesCount.textContent = likes;
-  commentShownCount.textContent = '#'; // TODO: отобразить кол-во показанных комментариев
   commentTotalCount.textContent = comments.length;
 
-  getListСomments(comments);
+  if (comments.length > 0) {
+    getListСomments(comments);
+  }
+
+  commentTotalCount.textContent = comments.length;
+  updateShownCommentCount();
 };
 
-export {renderDataUserPost};
+export {renderDataUserPost, updateShownCommentCount};
