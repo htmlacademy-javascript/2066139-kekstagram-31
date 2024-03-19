@@ -40,4 +40,6 @@ const createElement = (tagName, className, text) => {
 
 const getElementIndex = (el) => [...el.parentElement.children].indexOf(el);
 
-export {getRandomInteger, createRandomIdFromRange, getRandomArrayElement, isEscapeKey, createElement, getElementIndex};
+const getNormalizedStringArray = (string) => string.toString().toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
+
+export {getRandomInteger, createRandomIdFromRange, getRandomArrayElement, isEscapeKey, createElement, getElementIndex, getNormalizedStringArray};
