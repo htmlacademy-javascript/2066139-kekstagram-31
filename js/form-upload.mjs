@@ -1,4 +1,5 @@
-import {isEscapeKey} from './util.mjs';
+import {isEscapeKey, getNormalizedStringArray} from './util.mjs';
+import {configureFormValidation} from './form-validation.mjs';
 
 const bodyElement = document.querySelector('body');
 const uploadForm = document.querySelector('.img-upload__form');
@@ -16,6 +17,18 @@ const onDocumentKeydown = (evt) => {
     }
   }
 };
+
+const { isValidForm, resetValidate } = configureFormValidation(uploadForm, hashtagInputElement, descriptionElement);
+
+uploadForm.addEventListener('submit', (evt) => {
+  if (isValidForm()) {
+    hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
+    descriptionElement.value = descriptionElement.value.trim();
+    resetValidate();
+  } else {
+    evt.preventDefault();
+  }
+});
 
 const addImageUploadHandler = () => {
   uploadInputElement.addEventListener('change', (evt) => {
@@ -37,6 +50,7 @@ function closeEditingImageForm () {
   imageEditingFormElement.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.reset(); // Сбрасываем значения и состояние формы редактирования
+  resetValidate(); // Сбрасываем ошибки в форме
   uploadInputElement.value = ''; // Сбрасываем значение поля выбора файла
 }
 
