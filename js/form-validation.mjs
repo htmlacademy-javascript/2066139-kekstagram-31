@@ -1,7 +1,6 @@
 import {getNormalizedStringArray} from './util.mjs';
+import {MAX_LENGTH_COMMENT, MAX_HASHTAGS} from './consts.mjs';
 
-const MAX_LENGTH_COMMENT = 140;
-const MAX_HASHTAGS = 5;
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
 const ErrorMessage = {
   HASHTAG_COUNT: `Количество хэштегов не должно быть более ${MAX_HASHTAGS}`,

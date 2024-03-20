@@ -1,4 +1,5 @@
-const START_NUMBER_SHOW_COMMENTS = 5;
+import {NUMBER_LOAD_COMMENTS} from './consts.mjs';
+
 const userPostModalElement = document.querySelector('.big-picture');
 const socialCommentList = userPostModalElement.querySelector('.social__comments');
 
@@ -25,7 +26,7 @@ const renderListComments = (comments) => {
     commentatorAvatar.alt = name;
     commentatorMessage.textContent = message;
 
-    if (index >= START_NUMBER_SHOW_COMMENTS) {
+    if (index >= NUMBER_LOAD_COMMENTS) {
       commentElement.classList.add('hidden');
     }
 
