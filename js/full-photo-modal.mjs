@@ -35,7 +35,6 @@ function openUserPostModal (pictureItem) {
   document.addEventListener('keydown', onDocumentKeydown);
   userPostModalCloseElement.addEventListener('click', closeUserPostModal);
 
-  socialCommentListElement.innerHTML = '';
   renderDataUserPost(pictureItem);
 
   if (socialCommentListElement.children.length <= NUMBER_LOAD_COMMENTS) {

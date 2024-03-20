@@ -13,7 +13,7 @@ const commentTemplate = document.querySelector('#comment')
   .content
   .querySelector('.social__comment');
 
-const getListСomments = (comments) => {
+const renderListComments = (comments) => {
   const commentListFragment = document.createDocumentFragment();
 
   comments.forEach(({avatar, message, name}, index) => {
@@ -33,6 +33,8 @@ const getListСomments = (comments) => {
     commentListFragment.append(commentElement);
   });
 
+  socialCommentList.innerHTML = '';
+
   return socialCommentList.append(commentListFragment);
 };
 
@@ -49,7 +51,7 @@ const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   commentTotalCount.textContent = comments.length;
 
   if (comments.length > 0) {
-    getListСomments(comments);
+    renderListComments(comments);
   }
 
   commentTotalCount.textContent = comments.length;
