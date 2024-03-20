@@ -1,4 +1,5 @@
-const START_NUMBER_SHOW_COMMENTS = 5;
+import {NUMBER_LOAD_COMMENTS} from './consts.mjs';
+
 const userPostModalElement = document.querySelector('.big-picture');
 const socialCommentList = userPostModalElement.querySelector('.social__comments');
 
@@ -13,7 +14,7 @@ const commentTemplate = document.querySelector('#comment')
   .content
   .querySelector('.social__comment');
 
-const getListСomments = (comments) => {
+const renderListComments = (comments) => {
   const commentListFragment = document.createDocumentFragment();
 
   comments.forEach(({avatar, message, name}, index) => {
@@ -25,13 +26,15 @@ const getListСomments = (comments) => {
     commentatorAvatar.alt = name;
     commentatorMessage.textContent = message;
 
-    if (index >= START_NUMBER_SHOW_COMMENTS) {
+    if (index >= NUMBER_LOAD_COMMENTS) {
       commentElement.classList.add('hidden');
     }
 
     commentElement.append(commentatorAvatar, commentatorMessage);
     commentListFragment.append(commentElement);
   });
+
+  socialCommentList.innerHTML = '';
 
   return socialCommentList.append(commentListFragment);
 };
@@ -49,7 +52,7 @@ const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   commentTotalCount.textContent = comments.length;
 
   if (comments.length > 0) {
-    getListСomments(comments);
+    renderListComments(comments);
   }
 
   commentTotalCount.textContent = comments.length;

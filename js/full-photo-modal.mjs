@@ -1,7 +1,7 @@
 import {isEscapeKey} from './util.mjs';
+import {NUMBER_LOAD_COMMENTS} from './consts.mjs';
 import {renderDataUserPost, updateShownCommentCount} from './loading-modal-data.mjs';
 
-const NUMBER_LOAD_COMMENTS = 5;
 const bodyScrollElement = document.querySelector('body');
 const userPostModalElement = bodyScrollElement.querySelector('.big-picture');
 const userPostModalCloseElement = userPostModalElement.querySelector('#picture-cancel');
@@ -35,7 +35,6 @@ function openUserPostModal (pictureItem) {
   document.addEventListener('keydown', onDocumentKeydown);
   userPostModalCloseElement.addEventListener('click', closeUserPostModal);
 
-  socialCommentListElement.innerHTML = '';
   renderDataUserPost(pictureItem);
 
   if (socialCommentListElement.children.length <= NUMBER_LOAD_COMMENTS) {
