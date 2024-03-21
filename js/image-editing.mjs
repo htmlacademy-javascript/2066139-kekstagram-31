@@ -32,14 +32,14 @@ const onControlScaleBiggerClick = () => {
   }
 };
 
-const imageEditingScaleInitialize = () => {
+const initializeImageEditingScale = () => {
   controlScaleSmaller.addEventListener('click', onControlScaleSmallerClick);
   controlScaleBigger.addEventListener('click', onControlScaleBiggerClick);
 };
 
-const imageEditingScaleReset = () => {
+const resetImageEditingScale = () => {
   controlScaleValue.value = ScaleOptions.MAX_SCALE;
   imageUploadPreview.style.transform = null;
 };
 
-export {imageEditingScaleInitialize, imageEditingScaleReset};
+export {initializeImageEditingScale, resetImageEditingScale};
