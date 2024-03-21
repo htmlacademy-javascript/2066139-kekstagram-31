@@ -23,15 +23,17 @@ const onDocumentKeydown = (evt) => {
 const { isValidForm, resetValidate } = configureFormValidation(uploadForm, hashtagInputElement, descriptionElement);
 
 uploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
   if (isValidForm()) {
     hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
     descriptionElement.value = descriptionElement.value.trim();
-    resetValidate();
-    resetEffect();
-    resetImageEditingScale();
-  } else {
-    evt.preventDefault();
+    uploadForm.submit();
   }
+
+  resetValidate();
+  resetEffect();
+  resetImageEditingScale();
 });
 
 const addImageUploadHandler = () => {
