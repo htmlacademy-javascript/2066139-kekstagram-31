@@ -1,3 +1,5 @@
+import {SLIDER_INITIAL_MIN, SLIDER_INITIAL_MAX, SLIDER_INITIAL_STEP} from './consts.mjs';
+
 const effectSliderContainer = document.querySelector('.img-upload__effect-level');
 const levelEffectsInput = effectSliderContainer.querySelector('.effect-level__value');
 const effectSlider = effectSliderContainer.querySelector('.effect-level__slider');
@@ -25,11 +27,11 @@ const EffectConfig = {
 // конфигурация для инициализации слайдера
 const initialSliderOptions = {
   range: {
-    min: 0,
-    max: 100,
+    min: SLIDER_INITIAL_MIN,
+    max: SLIDER_INITIAL_MAX,
   },
-  start: 100,
-  step: 1,
+  start: SLIDER_INITIAL_MAX,
+  step: SLIDER_INITIAL_STEP,
   connect: 'lower',
   format: {
     to: (value) => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
@@ -77,9 +79,8 @@ const onEffectClick = (evt) => {
 
 const initializeEffectSlider = () => {
   effectSliderContainer.classList.add('hidden');
-  effectsList.addEventListener('change', onEffectClick);
+  effectsList.addEventListener('click', onEffectClick);
   noUiSlider.create(effectSlider, initialSliderOptions);
-
 };
 
 const destroyEffectSlider = () => effectSlider.noUiSlider.destroy();
