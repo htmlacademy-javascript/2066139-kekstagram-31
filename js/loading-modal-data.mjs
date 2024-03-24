@@ -1,4 +1,4 @@
-import {NUMBER_LOAD_COMMENTS} from './consts.mjs';
+import {CHUNK_LOAD_COMMENTS} from './consts.mjs';
 
 const userPostModalElement = document.querySelector('.big-picture');
 const socialCommentList = userPostModalElement.querySelector('.social__comments');
@@ -7,6 +7,7 @@ const fullSizePhoto = userPostModalElement.querySelector('.big-picture__img img'
 const socialCaption = userPostModalElement.querySelector('.social__caption');
 const likesCount = userPostModalElement.querySelector('.likes-count');
 
+const commentsLoaderElement = userPostModalElement.querySelector('.comments-loader');
 const commentShownCount = userPostModalElement.querySelector('.social__comment-shown-count');
 const commentTotalCount = userPostModalElement.querySelector('.social__comment-total-count');
 
@@ -14,34 +15,49 @@ const commentTemplate = document.querySelector('#comment')
   .content
   .querySelector('.social__comment');
 
-const renderListComments = (comments) => {
+let commentsData;
+let loadedCommentsCount;
+
+const createComment = ({avatar, message, name}) => {
+  const commentElement = commentTemplate.cloneNode(true);
+  const commentatorAvatar = commentElement.querySelector('.social__picture');
+  const commentatorMessage = commentElement.querySelector('.social__text');
+  commentatorAvatar.src = avatar;
+  commentatorAvatar.alt = name;
+  commentatorMessage.textContent = message;
+
+  return commentElement;
+};
+
+const renderListComments = () => {
+  const commentsToRender = Math.min(CHUNK_LOAD_COMMENTS, commentsData.length - loadedCommentsCount);
   const commentListFragment = document.createDocumentFragment();
 
-  comments.forEach(({avatar, message, name}, index) => {
-    const commentElement = commentTemplate.cloneNode(true);
-
-    const commentatorAvatar = commentElement.querySelector('.social__picture');
-    const commentatorMessage = commentElement.querySelector('.social__text');
-    commentatorAvatar.src = avatar;
-    commentatorAvatar.alt = name;
-    commentatorMessage.textContent = message;
-
-    if (index >= NUMBER_LOAD_COMMENTS) {
-      commentElement.classList.add('hidden');
-    }
-
-    commentElement.append(commentatorAvatar, commentatorMessage);
+  commentsData.slice(loadedCommentsCount, loadedCommentsCount + CHUNK_LOAD_COMMENTS).forEach((comment) => {
+    const commentElement = createComment(comment);
     commentListFragment.append(commentElement);
   });
 
-  socialCommentList.innerHTML = '';
+  socialCommentList.append(commentListFragment);
+  loadedCommentsCount += commentsToRender;
 
-  return socialCommentList.append(commentListFragment);
+  if (loadedCommentsCount >= commentsData.length) {
+    commentsLoaderElement.classList.add('hidden');
+    commentsLoaderElement.removeEventListener('click', onCommentsLoadClick);
+  } else {
+    commentsLoaderElement.classList.remove('hidden');
+    commentsLoaderElement.addEventListener('click', onCommentsLoadClick);
+  }
 };
 
 const updateShownCommentCount = () => {
-  commentShownCount.textContent = socialCommentList.querySelectorAll('.social__comment:not(.hidden)').length;
+  commentShownCount.textContent = loadedCommentsCount.toString();
 };
+
+function onCommentsLoadClick () {
+  renderListComments();
+  updateShownCommentCount();
+}
 
 const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   fullSizePhoto.src = urlPhoto;
@@ -50,13 +66,16 @@ const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   socialCaption.textContent = description;
   likesCount.textContent = likes;
   commentTotalCount.textContent = comments.length;
+  socialCommentList.textContent = ''; // очищаем список комментариев
+  loadedCommentsCount = 0;
 
   if (comments.length > 0) {
-    renderListComments(comments);
+    commentsData = comments;
+    renderListComments();
   }
 
   commentTotalCount.textContent = comments.length;
   updateShownCommentCount();
 };
 
-export {renderDataUserPost, updateShownCommentCount};
+export {renderDataUserPost};
