@@ -38,7 +38,7 @@ const initializeImageEditingScale = () => {
 };
 
 const resetImageEditingScale = () => {
-  controlScaleValue.value = ScaleOptions.MAX_SCALE;
+  controlScaleValue.value = `${ScaleOptions.MAX_SCALE}%`;
   imageUploadPreview.style.transform = null;
 };
 

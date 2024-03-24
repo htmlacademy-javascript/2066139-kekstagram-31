@@ -29,11 +29,10 @@ uploadForm.addEventListener('submit', (evt) => {
     hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
     descriptionElement.value = descriptionElement.value.trim();
     uploadForm.submit();
+    resetValidate();
+    resetEffect();
+    resetImageEditingScale();
   }
-
-  resetValidate();
-  resetEffect();
-  resetImageEditingScale();
 });
 
 const addImageUploadHandler = () => {
