@@ -42,8 +42,7 @@ const renderListComments = (comments) => {
 
 const showNextComments = () => {
   if (commentsData.length <= CHUNK_LOAD_COMMENTS) {
-    commentsLoaderElement.classList.add('hidden');
-    commentsLoaderElement.removeEventListener('click', onCommentsLoadClick);
+    removeCommentsLoader();
     loadedCommentsCount += commentsData.length;
     renderListComments(commentsData);
   } else {
@@ -63,6 +62,11 @@ function onCommentsLoadClick () {
   updateShownCommentCount();
 }
 
+function removeCommentsLoader () {
+  commentsLoaderElement.classList.add('hidden');
+  commentsLoaderElement.removeEventListener('click', onCommentsLoadClick);
+}
+
 const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   fullSizePhoto.src = urlPhoto;
   fullSizePhoto.alt = description;
@@ -77,11 +81,10 @@ const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
     showNextComments();
   } else {
     commentsLoaderElement.classList.add('hidden');
-    commentsLoaderElement.removeEventListener('click', onCommentsLoadClick);
   }
 
   commentTotalCount.textContent = comments.length;
   updateShownCommentCount();
 };
 
-export {renderDataUserPost};
+export {renderDataUserPost, removeCommentsLoader};

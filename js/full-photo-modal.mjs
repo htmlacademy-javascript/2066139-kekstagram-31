@@ -1,5 +1,5 @@
 import {isEscapeKey} from './util.mjs';
-import {renderDataUserPost} from './loading-modal-data.mjs';
+import {renderDataUserPost, removeCommentsLoader} from './loading-modal-data.mjs';
 
 const bodyScrollElement = document.querySelector('body');
 const userPostModalElement = bodyScrollElement.querySelector('.big-picture');
@@ -26,6 +26,7 @@ function openUserPostModal (pictureItem) {
 function closeUserPostModal () {
   userPostModalElement.classList.add('hidden');
   bodyScrollElement.classList.remove('modal-open');
+  removeCommentsLoader();
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
