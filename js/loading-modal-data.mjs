@@ -29,24 +29,28 @@ const createComment = ({avatar, message, name}) => {
   return commentElement;
 };
 
-const renderListComments = () => {
-  const commentsToRender = Math.min(CHUNK_LOAD_COMMENTS, commentsData.length - loadedCommentsCount);
+const renderListComments = (comments) => {
   const commentListFragment = document.createDocumentFragment();
 
-  commentsData.slice(loadedCommentsCount, loadedCommentsCount + CHUNK_LOAD_COMMENTS).forEach((comment) => {
+  comments.forEach((comment) => {
     const commentElement = createComment(comment);
     commentListFragment.append(commentElement);
   });
 
   socialCommentList.append(commentListFragment);
-  loadedCommentsCount += commentsToRender;
+};
 
-  if (loadedCommentsCount >= commentsData.length) {
+const showNextComments = () => {
+  if (commentsData.length <= CHUNK_LOAD_COMMENTS) {
     commentsLoaderElement.classList.add('hidden');
     commentsLoaderElement.removeEventListener('click', onCommentsLoadClick);
+    loadedCommentsCount += commentsData.length;
+    renderListComments(commentsData);
   } else {
     commentsLoaderElement.classList.remove('hidden');
     commentsLoaderElement.addEventListener('click', onCommentsLoadClick);
+    loadedCommentsCount += CHUNK_LOAD_COMMENTS;
+    renderListComments(commentsData.splice(0, CHUNK_LOAD_COMMENTS));
   }
 };
 
@@ -55,14 +59,13 @@ const updateShownCommentCount = () => {
 };
 
 function onCommentsLoadClick () {
-  renderListComments();
+  showNextComments();
   updateShownCommentCount();
 }
 
 const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   fullSizePhoto.src = urlPhoto;
   fullSizePhoto.alt = description;
-
   socialCaption.textContent = description;
   likesCount.textContent = likes;
   commentTotalCount.textContent = comments.length;
@@ -70,8 +73,11 @@ const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
   loadedCommentsCount = 0;
 
   if (comments.length > 0) {
-    commentsData = comments;
-    renderListComments();
+    commentsData = [...comments];
+    showNextComments();
+  } else {
+    commentsLoaderElement.classList.add('hidden');
+    commentsLoaderElement.removeEventListener('click', onCommentsLoadClick);
   }
 
   commentTotalCount.textContent = comments.length;
