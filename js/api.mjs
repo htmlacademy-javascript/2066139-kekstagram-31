@@ -9,17 +9,20 @@ const Route = {
   [Method.POST]: BASE_URL,
 };
 
-const load = async (route, method = Method.GET, body = null) => {
-  const response = await fetch(route, { method, body });
-  if (!response.ok) {
-    throw new Error();
-  }
-
-  return response.json();
+const ErrorText = {
+  [Method.GET]: 'Не удалось загрузить данные',
+  [Method.POST]: 'Не удалось отправить данные формы'
 };
 
-const getData = () => load(Route[Method.GET]);
+const load = async (route, method = Method.GET, body = null) => {
+  const response = await fetch(route, { method, body });
+  return response.ok
+    ? await response.json()
+    : Promise.reject({ message: ErrorText[method], status: response.status });
+};
 
-const sendData = (body) => load(Route[Method.POST], Method.POST, body);
+const getData = async () => await load(Route[Method.GET]);
+
+const sendData = async (body) => await load(Route[Method.POST], Method.POST, body);
 
 export {getData, sendData};
