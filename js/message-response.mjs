@@ -16,7 +16,7 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-const getErrorMessage = () => {
+const showDataErrorMessage = () => {
   const dataErrorMessage = dataErrorMessageTemplate.cloneNode(true);
   document.body.append(dataErrorMessage);
   setTimeout(() => {
@@ -54,4 +54,4 @@ function closeSuccessMessage () {
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
-export {getErrorMessage, showUploadSuccessMessage, showUploadErrorMessage};
+export {showDataErrorMessage, showUploadSuccessMessage, showUploadErrorMessage};
