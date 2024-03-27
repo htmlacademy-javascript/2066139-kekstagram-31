@@ -38,18 +38,20 @@ const toggleSubmitButton = (isDisabled, text) => {
 
 const { isValidForm, resetValidate } = configureFormValidation(uploadForm, hashtagInputElement, descriptionElement);
 
-const sendFormData = (formElement) => {
+const sendFormData = async (formElement) => {
   if (isValidForm()) {
     hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
     descriptionElement.value = descriptionElement.value.trim();
     toggleSubmitButton(true, SubmitButtonText.SENDING);
-    sendData(new FormData(formElement))
-      .then(() => {
-        showUploadSuccessMessage();
-        closeEditingImageForm();
-      })
-      .catch(showUploadErrorMessage)
-      .finally(() => toggleSubmitButton(false, SubmitButtonText.IDLE));
+    try {
+      await sendData(new FormData(formElement));
+      showUploadSuccessMessage();
+      closeEditingImageForm();
+    } catch {
+      showUploadErrorMessage();
+    } finally {
+      toggleSubmitButton(false, SubmitButtonText.IDLE);
+    }
   }
 };
 
