@@ -14,6 +14,11 @@ const imageEditingFormCloseElement = imageEditingFormElement.querySelector('.img
 const hashtagInputElement = imageEditingFormElement.querySelector('[name="hashtags"]');
 const descriptionElement = imageEditingFormElement.querySelector('[name="description"]');
 
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
+
 const isErrorMessageExists = () => Boolean(document.querySelector('.error'));
 const isInputFocused = () => [hashtagInputElement, descriptionElement].includes(document.activeElement);
 
@@ -26,8 +31,9 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-const toggleSubmitButton = (isDisabled) => {
+const toggleSubmitButton = (isDisabled, text) => {
   submitButtonElement.disabled = isDisabled;
+  submitButtonElement.textContent = text;
 };
 
 const { isValidForm, resetValidate } = configureFormValidation(uploadForm, hashtagInputElement, descriptionElement);
@@ -36,14 +42,14 @@ const sendFormData = (formElement) => {
   if (isValidForm()) {
     hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
     descriptionElement.value = descriptionElement.value.trim();
-    toggleSubmitButton(true);
+    toggleSubmitButton(true, SubmitButtonText.SENDING);
     sendData(new FormData(formElement))
       .then(() => {
         showUploadSuccessMessage();
         closeEditingImageForm();
       })
       .catch(showUploadErrorMessage)
-      .finally(() => toggleSubmitButton(false));
+      .finally(() => toggleSubmitButton(false, SubmitButtonText.IDLE));
   }
 };
 
