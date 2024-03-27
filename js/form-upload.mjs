@@ -32,14 +32,12 @@ const toggleSubmitButton = (isDisabled) => {
 
 const { isValidForm, resetValidate } = configureFormValidation(uploadForm, hashtagInputElement, descriptionElement);
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
+const sendFormData = (formElement) => {
   if (isValidForm()) {
     hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
     descriptionElement.value = descriptionElement.value.trim();
     toggleSubmitButton(true);
-    sendData(new FormData(evt.target))
+    sendData(new FormData(formElement))
       .then(() => {
         showUploadSuccessMessage();
         closeEditingImageForm();
@@ -47,7 +45,12 @@ uploadForm.addEventListener('submit', (evt) => {
       .catch(showUploadErrorMessage)
       .finally(() => toggleSubmitButton(false));
   }
-});
+};
+
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  sendFormData(evt.target);
+};
 
 const addImageUploadHandler = () => {
   uploadFileElement.addEventListener('change', (evt) => {
@@ -62,6 +65,7 @@ const onFormResetButtonClick = () => closeEditingImageForm();
 function openEditingImageForm () {
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
+  uploadForm.addEventListener('submit', onFormSubmit);
   imageEditingFormCloseElement.addEventListener('click', onFormResetButtonClick);
   initializeImageEditingScale();
   initializeEffectSlider();
