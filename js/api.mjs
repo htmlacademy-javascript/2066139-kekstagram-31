@@ -9,14 +9,14 @@ const Route = {
   [Method.POST]: BASE_URL,
 };
 
-const load = (route, method = Method.GET, body = null) =>
-  fetch(route, { method, body })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error();
-      }
-      return response.json();
-    });
+const load = async (route, method = Method.GET, body = null) => {
+  const response = await fetch(route, { method, body });
+  if (!response.ok) {
+    throw new Error();
+  }
+
+  return response.json();
+};
 
 const getData = () => load(Route[Method.GET]);
 
