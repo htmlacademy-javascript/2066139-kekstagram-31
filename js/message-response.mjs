@@ -1,7 +1,8 @@
 import {isEscapeKey} from './util.mjs';
 
-const ALERT_SHOW_TIME = 5000;
-const dataErrorMessageTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
+const REMOVE_MESSAGE_TIMEOUT = 5000;
+const bodyElement = document.body;
+const errorLoadDataTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 
@@ -17,11 +18,11 @@ const onDocumentKeydown = (evt) => {
 };
 
 const showDataErrorMessage = () => {
-  const dataErrorMessage = dataErrorMessageTemplate.cloneNode(true);
+  const dataErrorMessage = errorLoadDataTemplate.cloneNode(true);
   document.body.append(dataErrorMessage);
   setTimeout(() => {
     dataErrorMessage.remove();
-  }, ALERT_SHOW_TIME);
+  }, REMOVE_MESSAGE_TIMEOUT);
 };
 
 const onCloseButtonClick = () => closeSuccessMessage();
@@ -38,7 +39,7 @@ const getUploadMessage = (template, button) => {
   document.body.append(currentMessage);
   document.addEventListener('keydown', onDocumentKeydown);
   messageButtonClose.addEventListener('click', onCloseButtonClick);
-  currentMessage.addEventListener('click', onBodyCloseClick);
+  bodyElement.addEventListener('click', onBodyCloseClick);
 };
 
 const showUploadSuccessMessage = () => {
@@ -52,6 +53,7 @@ const showUploadErrorMessage = () => {
 function closeSuccessMessage () {
   currentMessage.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
+  bodyElement.removeEventListener('click', onBodyCloseClick);
 }
 
 export {showDataErrorMessage, showUploadSuccessMessage, showUploadErrorMessage};
