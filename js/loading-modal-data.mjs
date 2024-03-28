@@ -67,8 +67,8 @@ function removeCommentsLoader () {
   commentsLoaderElement.removeEventListener('click', onCommentsLoadClick);
 }
 
-const renderDataUserPost = ({urlPhoto, description, likes, comments}) => {
-  fullSizePhoto.src = urlPhoto;
+const renderDataUserPost = ({url, description, likes, comments}) => {
+  fullSizePhoto.src = url;
   fullSizePhoto.alt = description;
   socialCaption.textContent = description;
   likesCount.textContent = likes;

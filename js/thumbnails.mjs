@@ -3,17 +3,17 @@ const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const createThumbnail = ({urlPhoto, description, likes, comments}, imageClickHandler) => {
+const createThumbnail = ({url, description, likes, comments}, imageClickHandler) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
   const thumbnailImgElement = thumbnail.querySelector('.picture__img');
 
-  thumbnailImgElement.src = urlPhoto;
+  thumbnailImgElement.src = url;
   thumbnailImgElement.alt = description;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
   thumbnailImgElement.addEventListener('click', (evt) => {
     evt.preventDefault();
-    imageClickHandler({urlPhoto, description, likes, comments});
+    imageClickHandler({url, description, likes, comments});
   });
 
   return thumbnail;
