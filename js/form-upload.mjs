@@ -84,6 +84,7 @@ function closeEditingImageForm () {
   bodyElement.classList.remove('modal-open');
   imageEditingFormElement.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
+  uploadForm.removeEventListener('submit', onFormSubmit);
   imageEditingFormCloseElement.removeEventListener('click', onFormResetButtonClick);
   uploadForm.reset(); // Сбрасываем значения и состояние формы редактирования
   resetValidate(); // Сбрасываем ошибки в форме
