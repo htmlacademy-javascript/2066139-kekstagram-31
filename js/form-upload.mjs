@@ -9,10 +9,12 @@ const bodyElement = document.querySelector('body');
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileElement = uploadForm.querySelector('.img-upload__input');
 const imageEditingFormElement = uploadForm.querySelector('.img-upload__overlay');
+const imageUploadPreview = imageEditingFormElement.querySelector('.img-upload__preview > img');
 const submitButtonElement = uploadForm.querySelector('.img-upload__submit');
 const imageEditingFormCloseElement = imageEditingFormElement.querySelector('.img-upload__cancel');
 const hashtagInputElement = imageEditingFormElement.querySelector('[name="hashtags"]');
 const descriptionElement = imageEditingFormElement.querySelector('[name="description"]');
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -60,9 +62,22 @@ const onFormSubmit = (evt) => {
   sendFormData(evt.target);
 };
 
+const isValidFileType = (file) => {
+  const fileName = file.name.toLowerCase();
+
+  return FILE_TYPES.some((type) => fileName.endsWith(type));
+};
+
 const addImageUploadHandler = () => {
   uploadFileElement.addEventListener('change', (evt) => {
     if (evt.target.value) {
+      const fileImg = uploadFileElement.files[0];
+      const isMatches = isValidFileType(fileImg);
+
+      if (isMatches) {
+        imageUploadPreview.src = URL.createObjectURL(fileImg);
+      }
+
       openEditingImageForm();
     }
   });
@@ -92,6 +107,7 @@ function closeEditingImageForm () {
   destroyEffectSlider();
   resetImageEditingScale();
   uploadFileElement.value = ''; // Сбрасываем значение поля выбора файла
+  URL.revokeObjectURL(imageUploadPreview.src);
 }
 
 export {addImageUploadHandler};
