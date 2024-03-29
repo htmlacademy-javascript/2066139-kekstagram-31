@@ -62,6 +62,16 @@ const onFormSubmit = (evt) => {
   sendFormData(evt.target);
 };
 
+const resetForm = () => {
+  uploadForm.reset(); // Сбрасываем значения и состояние формы редактирования
+  resetValidate(); // Сбрасываем ошибки в форме
+  resetEffect();
+  destroyEffectSlider();
+  resetImageEditingScale();
+  uploadFileElement.value = ''; // Сбрасываем значение поля выбора файла
+  URL.revokeObjectURL(imageUploadPreview.src); // освобождает существующий URL-адрес
+};
+
 const isValidFileType = (file) => {
   const fileName = file.name.toLowerCase();
 
@@ -101,13 +111,7 @@ function closeEditingImageForm () {
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.removeEventListener('submit', onFormSubmit);
   imageEditingFormCloseElement.removeEventListener('click', onFormResetButtonClick);
-  uploadForm.reset(); // Сбрасываем значения и состояние формы редактирования
-  resetValidate(); // Сбрасываем ошибки в форме
-  resetEffect();
-  destroyEffectSlider();
-  resetImageEditingScale();
-  uploadFileElement.value = ''; // Сбрасываем значение поля выбора файла
-  URL.revokeObjectURL(imageUploadPreview.src);
+  resetForm();
 }
 
 export {addImageUploadHandler};
