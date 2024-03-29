@@ -10,7 +10,8 @@ const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileElement = uploadForm.querySelector('.img-upload__input');
 const imageEditingFormElement = uploadForm.querySelector('.img-upload__overlay');
 const imageUploadPreview = imageEditingFormElement.querySelector('.img-upload__preview > img');
-const submitButtonElement = uploadForm.querySelector('.img-upload__submit');
+const effectPreviewElement = imageEditingFormElement.querySelectorAll('.effects__preview');
+const submitButtonElement = imageEditingFormElement.querySelector('.img-upload__submit');
 const imageEditingFormCloseElement = imageEditingFormElement.querySelector('.img-upload__cancel');
 const hashtagInputElement = imageEditingFormElement.querySelector('[name="hashtags"]');
 const descriptionElement = imageEditingFormElement.querySelector('[name="description"]');
@@ -86,6 +87,9 @@ const addImageUploadHandler = () => {
 
       if (isMatches) {
         imageUploadPreview.src = URL.createObjectURL(fileImg);
+        effectPreviewElement.forEach((preview) => {
+          preview.style.backgroundImage = `url('${imageUploadPreview.src}')`;
+        });
       }
 
       openEditingImageForm();
