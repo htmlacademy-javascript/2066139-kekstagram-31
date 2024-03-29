@@ -47,6 +47,14 @@ const getElementIndex = (el) => [...el.parentElement.children].indexOf(el);
 
 const getNormalizedStringArray = (string) => string.toString().toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
 
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   getRandomInteger,
   createRandomIdFromRange,
@@ -55,5 +63,6 @@ export {
   isEscapeKey,
   createElement,
   getElementIndex,
-  getNormalizedStringArray
+  getNormalizedStringArray,
+  debounce,
 };
