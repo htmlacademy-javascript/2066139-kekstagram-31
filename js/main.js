@@ -6,6 +6,7 @@ import {openUserPostModal} from './full-photo-modal.mjs';
 import {addImageUploadHandler} from './form-upload.mjs';
 
 const bootstrap = async () => {
+  addImageUploadHandler();
   try {
     const picturesData = await getData();
     const onThumbnailClick = (pictureData) => openUserPostModal(pictureData);
@@ -14,7 +15,6 @@ const bootstrap = async () => {
   } catch {
     showDataErrorMessage();
   }
-  addImageUploadHandler();
 };
 
 bootstrap();
