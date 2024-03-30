@@ -24,6 +24,8 @@ const EffectConfig = {
   }
 };
 
+let activeSlider = null;
+
 // конфигурация для инициализации слайдера
 const initialSliderOptions = {
   range: {
@@ -80,7 +82,10 @@ const onEffectClick = (evt) => {
 const initializeEffectSlider = () => {
   effectSliderContainer.classList.add('hidden');
   effectsList.addEventListener('click', onEffectClick);
-  noUiSlider.create(effectSlider, initialSliderOptions);
+
+  if (!activeSlider) {
+    activeSlider = noUiSlider.create(effectSlider, initialSliderOptions);
+  }
 };
 
 const destroyEffectSlider = () => effectSlider.noUiSlider.destroy();
