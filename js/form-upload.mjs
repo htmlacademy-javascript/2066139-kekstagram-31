@@ -1,6 +1,6 @@
 import {sendData} from './api.mjs';
 import {showUploadSuccessMessage, showUploadErrorMessage} from './message-response.mjs';
-import {isEscapeKey, getNormalizedStringArray} from './util.mjs';
+import {isEscapeKey} from './util.mjs';
 import {configureFormValidation} from './form-validation.mjs';
 import {initializeImageEditingScale, resetImageEditingScale} from './image-editing-scale.mjs';
 import {initializeEffectSlider, destroyEffectSlider, resetEffect} from './image-effects.mjs';
@@ -43,13 +43,11 @@ const { isValidForm, resetValidate } = configureFormValidation(uploadForm, hasht
 
 const sendFormData = async (formElement) => {
   if (isValidForm()) {
-    hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
-    descriptionElement.value = descriptionElement.value.trim();
     toggleSubmitButton(true, SubmitButtonText.SENDING);
     try {
       await sendData(new FormData(formElement));
-      showUploadSuccessMessage();
       closeEditingImageForm();
+      showUploadSuccessMessage();
     } catch {
       showUploadErrorMessage();
     } finally {
@@ -100,18 +98,18 @@ const addImageUploadHandler = () => {
 const onFormResetButtonClick = () => closeEditingImageForm();
 
 function openEditingImageForm () {
+  imageEditingFormElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
   uploadForm.addEventListener('submit', onFormSubmit);
   imageEditingFormCloseElement.addEventListener('click', onFormResetButtonClick);
   initializeImageEditingScale();
   initializeEffectSlider();
-  imageEditingFormElement.classList.remove('hidden');
 }
 
 function closeEditingImageForm () {
-  bodyElement.classList.remove('modal-open');
   imageEditingFormElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.removeEventListener('submit', onFormSubmit);
   imageEditingFormCloseElement.removeEventListener('click', onFormResetButtonClick);
