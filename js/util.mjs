@@ -45,7 +45,7 @@ const createElement = (tagName, className, text) => {
 
 const getElementIndex = (el) => [...el.parentElement.children].indexOf(el);
 
-const getNormalizedStringArray = (string) => string.toString().toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
+const getNormalizedStringArray = (string) => string.toString().toLowerCase().trim().split(' ').filter(Boolean);
 
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
