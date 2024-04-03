@@ -73,8 +73,9 @@ const resetForm = () => {
 
 const isValidFileType = (file) => {
   const fileName = file.name.toLowerCase();
+  const fileExt = fileName.split('.').pop();
 
-  return FILE_TYPES.some((type) => fileName.endsWith(type));
+  return FILE_TYPES.includes(fileExt);
 };
 
 const addImageUploadHandler = () => {
@@ -88,6 +89,8 @@ const addImageUploadHandler = () => {
         effectPreviewElement.forEach((preview) => {
           preview.style.backgroundImage = `url('${imageUploadPreview.src}')`;
         });
+      } else {
+        return;
       }
 
       openEditingImageForm();
