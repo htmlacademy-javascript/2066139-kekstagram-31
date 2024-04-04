@@ -3,18 +3,13 @@ import {MAX_LENGTH_COMMENT, MAX_HASHTAGS} from './consts.mjs';
 
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
 const ErrorMessage = {
+  INVALID_SYNTAX: 'Введён невалидный хэштег',
   HASHTAG_COUNT: `Количество хэштегов не должно быть более ${MAX_HASHTAGS}`,
   DUPLICATE_HASHTAGS: 'Хэштеги не должны повторяться',
-  MAX_LENGTH_COMMENTS: `Длина комментария не должна превышать ${MAX_LENGTH_COMMENT} символов`
+  MAX_LENGTH_COMMENTS: `Длина комментария не должна превышать ${MAX_LENGTH_COMMENT} символов`,
 };
 
 const validateHashtagSyntax = (value) => getNormalizedStringArray(value).every((tag) => hashtagRegex.test(tag));
-
-const getErrorSyntaxMessage = (value) => {
-  const invalidHashes = getNormalizedStringArray(value).filter((tag) => !tag.match(hashtagRegex));
-
-  return (invalidHashes.length === 1) ? 'Введён невалидный хэштег' : 'Введены невалидные хэштеги';
-};
 
 const validateHashtagCount = (value) => {
   const hashtags = getNormalizedStringArray(value);
@@ -37,7 +32,7 @@ const configureFormValidation = (uploadForm, hashtagInput, descriptionInput) => 
     errorTextClass: 'img-upload__field-wrapper--error',
   });
 
-  pristine.addValidator(hashtagInput, validateHashtagSyntax, getErrorSyntaxMessage);
+  pristine.addValidator(hashtagInput, validateHashtagSyntax, ErrorMessage.INVALID_SYNTAX);
   pristine.addValidator(hashtagInput, validateHashtagCount, ErrorMessage.HASHTAG_COUNT);
   pristine.addValidator(hashtagInput, validateHashtagDuplicate, ErrorMessage.DUPLICATE_HASHTAGS);
   pristine.addValidator(descriptionInput, validateDescriptionLength, ErrorMessage.MAX_LENGTH_COMMENTS);
