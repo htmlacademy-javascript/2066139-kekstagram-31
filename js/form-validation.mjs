@@ -8,35 +8,24 @@ const ErrorMessage = {
   MAX_LENGTH_COMMENTS: `Длина комментария не должна превышать ${MAX_LENGTH_COMMENT} символов`
 };
 
-const duplicateHashtagData = [];
-
 const validateHashtagSyntax = (value) => getNormalizedStringArray(value).every((tag) => hashtagRegex.test(tag));
 
-const getErrorSyntaxMessage = () => (duplicateHashtagData.length === 1)
-  ? 'Введён невалидный хэштег'
-  : 'Введены невалидные хэштеги';
+const getErrorSyntaxMessage = (value) => {
+  const invalidHashes = getNormalizedStringArray(value).filter((tag) => !tag.match(hashtagRegex));
+
+  return (invalidHashes.length === 1) ? 'Введён невалидный хэштег' : 'Введены невалидные хэштеги';
+};
 
 const validateHashtagCount = (value) => {
   const hashtags = getNormalizedStringArray(value);
+
   return hashtags.length <= MAX_HASHTAGS;
 };
 
 const validateHashtagDuplicate = (value) => {
   const hashtags = getNormalizedStringArray(value);
-  duplicateHashtagData.length = 0;
-  const uniqueHashtags = new Set();
 
-  hashtags.forEach((hashtag) => {
-    const isDuplicateError = duplicateHashtagData.includes(hashtag);
-
-    if (uniqueHashtags.has(hashtag) && !isDuplicateError) {
-      duplicateHashtagData.push(hashtag);
-    }
-
-    uniqueHashtags.add(hashtag);
-  });
-
-  return !duplicateHashtagData.length;
+  return hashtags.length === new Set(hashtags).size;
 };
 
 const validateDescriptionLength = (value) => MAX_LENGTH_COMMENT >= value.length;
