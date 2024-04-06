@@ -14,12 +14,13 @@ const ButtonFilterId = {
 const debounceRenderThumbnails = debounce(renderThumbnails);
 
 const setActiveClass = (target) => {
-  const activeButton = photoFilterContainer.querySelector(`.${BUTTON_ACTIVE_CLASS}`);
-
-  if (!target.classList.contains(BUTTON_ACTIVE_CLASS)) {
-    activeButton.classList.remove(BUTTON_ACTIVE_CLASS);
-    target.classList.add(BUTTON_ACTIVE_CLASS);
+  if (target.classList.contains(BUTTON_ACTIVE_CLASS)) {
+    return;
   }
+
+  const activeButton = photoFilterContainer.querySelector(`.${BUTTON_ACTIVE_CLASS}`);
+  activeButton.classList.remove(BUTTON_ACTIVE_CLASS);
+  target.classList.add(BUTTON_ACTIVE_CLASS);
 };
 
 const selectedRandomFilter = (pictures) => {
