@@ -1,6 +1,6 @@
 import {sendData} from './api.mjs';
 import {showUploadSuccessMessage, showUploadErrorMessage} from './message-response.mjs';
-import {isEscapeKey, getNormalizedStringArray} from './util.mjs';
+import {isEscapeKey} from './util.mjs';
 import {configureFormValidation} from './form-validation.mjs';
 import {initializeImageEditingScale, resetImageEditingScale} from './image-editing-scale.mjs';
 import {initializeEffectSlider, destroyEffectSlider, resetEffect} from './image-effects.mjs';
@@ -9,10 +9,13 @@ const bodyElement = document.querySelector('body');
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileElement = uploadForm.querySelector('.img-upload__input');
 const imageEditingFormElement = uploadForm.querySelector('.img-upload__overlay');
-const submitButtonElement = uploadForm.querySelector('.img-upload__submit');
+const imageUploadPreview = imageEditingFormElement.querySelector('.img-upload__preview > img');
+const effectPreviewElement = imageEditingFormElement.querySelectorAll('.effects__preview');
+const submitButtonElement = imageEditingFormElement.querySelector('.img-upload__submit');
 const imageEditingFormCloseElement = imageEditingFormElement.querySelector('.img-upload__cancel');
 const hashtagInputElement = imageEditingFormElement.querySelector('[name="hashtags"]');
 const descriptionElement = imageEditingFormElement.querySelector('[name="description"]');
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -40,13 +43,11 @@ const { isValidForm, resetValidate } = configureFormValidation(uploadForm, hasht
 
 const sendFormData = async (formElement) => {
   if (isValidForm()) {
-    hashtagInputElement.value = getNormalizedStringArray(hashtagInputElement.value);
-    descriptionElement.value = descriptionElement.value.trim();
     toggleSubmitButton(true, SubmitButtonText.SENDING);
     try {
       await sendData(new FormData(formElement));
-      showUploadSuccessMessage();
       closeEditingImageForm();
+      showUploadSuccessMessage();
     } catch {
       showUploadErrorMessage();
     } finally {
@@ -60,9 +61,38 @@ const onFormSubmit = (evt) => {
   sendFormData(evt.target);
 };
 
+const resetForm = () => {
+  uploadForm.reset(); // Сбрасываем значения и состояние формы редактирования
+  resetValidate(); // Сбрасываем ошибки в форме
+  resetEffect();
+  destroyEffectSlider();
+  resetImageEditingScale();
+  uploadFileElement.value = ''; // Сбрасываем значение поля выбора файла
+  URL.revokeObjectURL(imageUploadPreview.src); // освобождает существующий URL-адрес
+};
+
+const isValidFileType = (file) => {
+  const fileName = file.name.toLowerCase();
+  const fileExt = fileName.split('.').pop();
+
+  return FILE_TYPES.includes(fileExt);
+};
+
 const addImageUploadHandler = () => {
   uploadFileElement.addEventListener('change', (evt) => {
     if (evt.target.value) {
+      const fileImg = uploadFileElement.files[0];
+      const isMatches = isValidFileType(fileImg);
+
+      if (isMatches) {
+        imageUploadPreview.src = URL.createObjectURL(fileImg);
+        effectPreviewElement.forEach((preview) => {
+          preview.style.backgroundImage = `url('${imageUploadPreview.src}')`;
+        });
+      } else {
+        return;
+      }
+
       openEditingImageForm();
     }
   });
@@ -71,27 +101,22 @@ const addImageUploadHandler = () => {
 const onFormResetButtonClick = () => closeEditingImageForm();
 
 function openEditingImageForm () {
+  imageEditingFormElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
   uploadForm.addEventListener('submit', onFormSubmit);
   imageEditingFormCloseElement.addEventListener('click', onFormResetButtonClick);
   initializeImageEditingScale();
   initializeEffectSlider();
-  imageEditingFormElement.classList.remove('hidden');
 }
 
 function closeEditingImageForm () {
-  bodyElement.classList.remove('modal-open');
   imageEditingFormElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.removeEventListener('submit', onFormSubmit);
   imageEditingFormCloseElement.removeEventListener('click', onFormResetButtonClick);
-  uploadForm.reset(); // Сбрасываем значения и состояние формы редактирования
-  resetValidate(); // Сбрасываем ошибки в форме
-  resetEffect();
-  destroyEffectSlider();
-  resetImageEditingScale();
-  uploadFileElement.value = ''; // Сбрасываем значение поля выбора файла
+  resetForm();
 }
 
 export {addImageUploadHandler};

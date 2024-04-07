@@ -1,6 +1,6 @@
+import {REMOVE_MESSAGE_TIMEOUT} from './consts.mjs';
 import {isEscapeKey} from './util.mjs';
 
-const REMOVE_MESSAGE_TIMEOUT = 5000;
 const bodyElement = document.body;
 const errorLoadDataTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');

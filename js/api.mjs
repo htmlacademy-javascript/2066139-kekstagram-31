@@ -6,7 +6,7 @@ const Method = {
 
 const Route = {
   [Method.GET]: `${BASE_URL}/data`,
-  [Method.POST]: BASE_URL,
+  [Method.POST]: `${BASE_URL}/`,
 };
 
 const ErrorText = {

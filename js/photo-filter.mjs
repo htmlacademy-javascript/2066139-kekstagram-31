@@ -4,7 +4,6 @@ import {renderThumbnails} from './thumbnails.mjs';
 
 const BUTTON_ACTIVE_CLASS = 'img-filters__button--active';
 const photoFilterContainer = document.querySelector('.img-filters');
-const buttonFilterElements = photoFilterContainer.querySelectorAll('.img-filters__button');
 
 const ButtonFilterId = {
   DEFAULT: 'filter-default',
@@ -12,11 +11,16 @@ const ButtonFilterId = {
   DISCUSSED: 'filter-discussed'
 };
 
+const debounceRenderThumbnails = debounce(renderThumbnails);
+
 const setActiveClass = (target) => {
-  if (!target.classList.contains(BUTTON_ACTIVE_CLASS)) {
-    buttonFilterElements.forEach((button) => button.classList.remove(BUTTON_ACTIVE_CLASS));
-    target.classList.add(BUTTON_ACTIVE_CLASS);
+  if (target.classList.contains(BUTTON_ACTIVE_CLASS)) {
+    return;
   }
+
+  const activeButton = photoFilterContainer.querySelector(`.${BUTTON_ACTIVE_CLASS}`);
+  activeButton.classList.remove(BUTTON_ACTIVE_CLASS);
+  target.classList.add(BUTTON_ACTIVE_CLASS);
 };
 
 const selectedRandomFilter = (pictures) => {
@@ -40,10 +44,8 @@ const onButtonFilterClick = {
 
 const filterThumbnails = (selectedButtonFilter, pictures, onThumbnailClick) => {
   const filteredPhoto = onButtonFilterClick[selectedButtonFilter.id](pictures);
-  renderThumbnails(filteredPhoto, onThumbnailClick);
+  debounceRenderThumbnails(filteredPhoto, onThumbnailClick);
 };
-
-const debouncedFilterThumbnails = debounce(filterThumbnails);
 
 const showPhotoFilter = (pictures, onThumbnailClick) => {
   photoFilterContainer.classList.remove('img-filters--inactive');
@@ -52,7 +54,7 @@ const showPhotoFilter = (pictures, onThumbnailClick) => {
 
     if (selectedButtonFilter) {
       setActiveClass(selectedButtonFilter);
-      debouncedFilterThumbnails(selectedButtonFilter, pictures, onThumbnailClick);
+      filterThumbnails(selectedButtonFilter, pictures, onThumbnailClick);
     }
   });
 };
