@@ -5,6 +5,12 @@ import {configureFormValidation} from './form-validation.mjs';
 import {initializeImageEditingScale, resetImageEditingScale} from './image-editing-scale.mjs';
 import {initializeEffectSlider, destroyEffectSlider, resetEffect} from './image-effects.mjs';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
+
 const bodyElement = document.querySelector('body');
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileElement = uploadForm.querySelector('.img-upload__input');
@@ -15,12 +21,6 @@ const submitButtonElement = imageEditingFormElement.querySelector('.img-upload__
 const imageEditingFormCloseElement = imageEditingFormElement.querySelector('.img-upload__cancel');
 const hashtagInputElement = imageEditingFormElement.querySelector('[name="hashtags"]');
 const descriptionElement = imageEditingFormElement.querySelector('[name="description"]');
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
-
-const SubmitButtonText = {
-  IDLE: 'Опубликовать',
-  SENDING: 'Публикую...'
-};
 
 const isErrorMessageExists = () => Boolean(document.querySelector('.error'));
 const isInputFocused = () => [hashtagInputElement, descriptionElement].includes(document.activeElement);
