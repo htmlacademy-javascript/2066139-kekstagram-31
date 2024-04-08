@@ -1,12 +1,6 @@
 import {SLIDER_INITIAL_MIN, SLIDER_INITIAL_MAX, SLIDER_INITIAL_STEP} from './consts.mjs';
 
-const effectSliderContainer = document.querySelector('.img-upload__effect-level');
-const levelEffectsInput = effectSliderContainer.querySelector('.effect-level__value');
-const effectSlider = effectSliderContainer.querySelector('.effect-level__slider');
-const effectsList = document.querySelector('.effects__list');
-const imageUploadPreview = document.querySelector('.img-upload__preview > img');
-
-const EffectConfig = {
+const EFFECT_CONFIG = {
   chrome: {
     style: 'grayscale', unit: '', sliderOptions: { min: 0, max: 1, step: 0.1 },
   },
@@ -24,7 +18,13 @@ const EffectConfig = {
   }
 };
 
-let activeSlider = null;
+const effectSliderContainer = document.querySelector('.img-upload__effect-level');
+const levelEffectsInput = effectSliderContainer.querySelector('.effect-level__value');
+const effectSlider = effectSliderContainer.querySelector('.effect-level__slider');
+const effectsList = document.querySelector('.effects__list');
+const imageUploadPreview = document.querySelector('.img-upload__preview > img');
+
+let activeSlider;
 
 // конфигурация для инициализации слайдера
 const initialSliderOptions = {
@@ -75,7 +75,7 @@ const onEffectClick = (evt) => {
 
   if (effectInput) {
     const effectValue = effectInput.value;
-    setEffect(EffectConfig[effectValue]);
+    setEffect(EFFECT_CONFIG[effectValue]);
   }
 };
 
@@ -88,6 +88,10 @@ const initializeEffectSlider = () => {
   }
 };
 
-const destroyEffectSlider = () => effectSlider.noUiSlider.destroy();
+const destroyEffectSlider = () => {
+  activeSlider.destroy();
+  activeSlider = null;
+};
+
 
 export {initializeEffectSlider, destroyEffectSlider, resetEffect};

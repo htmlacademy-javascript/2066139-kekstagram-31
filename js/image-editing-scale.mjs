@@ -1,13 +1,13 @@
-const imageUploadPreview = document.querySelector('.img-upload__preview img');
-const controlScaleValue = document.querySelector('.scale__control--value');
-const controlScaleSmaller = document.querySelector('.scale__control--smaller');
-const controlScaleBigger = document.querySelector('.scale__control--bigger');
-
 const ScaleOptions = {
   MIN_SCALE: 25,
   MAX_SCALE: 100,
   STEP_CHANGE: 25
 };
+
+const imageUploadPreview = document.querySelector('.img-upload__preview img');
+const controlScaleValue = document.querySelector('.scale__control--value');
+const controlScaleSmaller = document.querySelector('.scale__control--smaller');
+const controlScaleBigger = document.querySelector('.scale__control--bigger');
 
 const updateScale = (controlValue) => {
   controlScaleValue.value = `${controlValue}%`;
