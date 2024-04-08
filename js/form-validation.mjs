@@ -1,7 +1,7 @@
 import {getNormalizedStringArray} from './util.mjs';
 import {MAX_LENGTH_COMMENT, MAX_HASHTAGS} from './consts.mjs';
 
-const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
+const HASHTAG_REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
 const ErrorMessage = {
   INVALID_SYNTAX: 'Введён невалидный хэштег',
   HASHTAG_COUNT: `Количество хэштегов не должно быть более ${MAX_HASHTAGS}`,
@@ -9,7 +9,7 @@ const ErrorMessage = {
   MAX_LENGTH_COMMENTS: `Длина комментария не должна превышать ${MAX_LENGTH_COMMENT} символов`,
 };
 
-const validateHashtagSyntax = (value) => getNormalizedStringArray(value).every((tag) => hashtagRegex.test(tag));
+const validateHashtagSyntax = (value) => getNormalizedStringArray(value).every((tag) => HASHTAG_REGEX.test(tag));
 
 const validateHashtagCount = (value) => {
   const hashtags = getNormalizedStringArray(value);
